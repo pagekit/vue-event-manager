@@ -1,0 +1,35 @@
+{
+  "name": "vue-event-manager",
+  "version": "1.0.0",
+  "main": "dist/vue-event-manager.common.js",
+  "module": "dist/vue-event-manager.es2015.js",
+  "description": "The event manager for Vue.js",
+  "homepage": "https://github.com/pagekit/vue-event-manager#readme",
+  "license": "MIT",
+  "keywords": [
+    "vue",
+    "event",
+    "listener"
+  ],
+  "bugs": {
+    "url": "https://github.com/pagekit/vue-event-manager/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pagekit/vue-event-manager.git"
+  },
+  "scripts": {
+    "build": "node build/build.js",
+    "release": "node build/release.js"
+  },
+  "devDependencies": {
+    "buble": "^0.15.2",
+    "buble-loader": "^0.4.1",
+    "jest": "^19.0.2",
+    "replace-in-file": "^2.5.0",
+    "rollup": "^0.41.6",
+    "rollup-plugin-buble": "^0.15.0",
+    "uglify-js": "^2.8.22",
+    "vue": "^2.2.6"
+  }
+}
