@@ -1,5 +1,5 @@
 /*!
- * vue-event-manager v1.0.0
+ * vue-event-manager v1.0.1
  * https://github.com/pagekit/vue-event-manager
  * Released under the MIT License.
  */
@@ -19,6 +19,44 @@ function isObject(obj) {
 function forEach(collection, callback) {
     Object.keys(collection || {}).forEach(function (key) {
         callback.call(null, collection[key], key);
+    });
+}
+
+/**
+ * Array.findIndex() polyfill.
+ */
+if (!Array.prototype.findIndex) {
+    Object.defineProperty(Array.prototype, 'findIndex', {
+
+        value: function value(predicate) {
+
+            if (this == null) {
+                throw new TypeError('"this" is null or not defined');
+            }
+
+            if (typeof predicate !== 'function') {
+                throw new TypeError('predicate must be a function');
+            }
+
+            var o = Object(this);
+            var len = o.length >>> 0;
+            var thisArg = arguments[1];
+            var k = 0;
+
+            while (k < len) {
+
+                var kValue = o[k];
+
+                if (predicate.call(thisArg, kValue, k, o)) {
+                    return k;
+                }
+
+                k++;
+            }
+
+            return -1;
+        }
+
     });
 }
 
