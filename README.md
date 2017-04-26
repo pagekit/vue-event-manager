@@ -16,6 +16,38 @@ $ yarn add vue-event-manager
 $ npm install vue-event-manager
 ```
 
+## Example
+```js
+new Vue({
+
+  created() {
+
+    // trigger event
+    this.$trigger('someEvent', {foo: 'bar'});
+
+  },
+
+  events: {
+
+    // event handler
+    someEvent(param) { ... },
+
+    // event handler with priority
+    otherEvent: {
+
+        // handler callback
+        handler(param) { ... },
+
+        // a higher priority, means earlier execution
+        priority: 10
+
+    }
+
+  }
+
+});
+```
+
 ## Changelog
 
 Details changes for each release are documented in the [release notes](https://github.com/pagekit/vue-event-manager/releases).
