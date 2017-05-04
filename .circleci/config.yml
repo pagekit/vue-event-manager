@@ -1,0 +1,17 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:7.9.0
+    working_directory: ~/vue-event-manager
+    steps:
+      - run:
+          name: Update Environment
+          command: apt-get update
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: yarn
+      - run:
+          name: Build Release
+          command: yarn run build
