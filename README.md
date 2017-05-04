@@ -16,7 +16,7 @@ $ yarn add vue-event-manager
 $ npm install vue-event-manager
 ```
 
-## CDN
+### CDN
 Available on [jsdelivr](https://www.jsdelivr.com/projects/vue.event.manager) or [unpkg](https://unpkg.com/vue-event-manager@1.0.1/dist/vue-event-manager.min.js).
 ```html
 <script src="https://cdn.jsdelivr.net/vue.event.manager/1.0.1/vue-event-manager.min.js"></script>
