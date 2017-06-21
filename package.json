@@ -27,11 +27,11 @@
   "devDependencies": {
     "buble": "^0.15.2",
     "buble-loader": "^0.4.1",
-    "jest": "^19.0.2",
+    "jest": "^20.0.4",
     "replace-in-file": "^2.5.0",
-    "rollup": "^0.41.6",
+    "rollup": "^0.43.0",
     "rollup-plugin-buble": "^0.15.0",
-    "uglify-js": "^2.8.22",
-    "vue": "^2.2.6"
+    "uglify-js": "^3.0.18",
+    "vue": "^2.3.4"
   }
 }

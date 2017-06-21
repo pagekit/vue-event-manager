@@ -12,38 +12,35 @@ function plugin(Vue) {
     }
 
     var Events = new EventManager();
+    var version = Number(Vue.version.split('.')[0]);
 
-    Vue.mixin({
+    function initEvents() {
 
-        init() {
+        var {events} = this.$options, _events = [];
 
-            var { events } = this.$options, _events = [];
+        if (events) {
 
-            if (events) {
+            forEach(events, (listeners, event) => {
+                forEach(isArray(listeners) ? listeners : [listeners], listener => {
 
-                forEach(events, (listeners, event) => {
-                    forEach(isArray(listeners) ? listeners : [listeners], listener => {
+                    var priority = 0;
 
-                        var priority = 0;
+                    if (isObject(listener)) {
+                        priority = listener.priority;
+                        listener = listener.handler;
+                    }
 
-                        if (isObject(listener)) {
-                            priority = listener.priority;
-                            listener = listener.handler;
-                        }
-
-                        _events.push(Events.on(event, listener.bind(this), priority));
-                    });
+                    _events.push(Events.on(event, listener.bind(this), priority));
                 });
+            });
 
-                this.$on('hook:beforeDestroy', () => _events.forEach(off => off()));
-            }
-
+            this.$on('hook:beforeDestroy', () => _events.forEach(off => off()));
         }
-
-    });
+    }
 
     Vue.prototype.$events = Events;
     Vue.prototype.$trigger = Events.trigger.bind(Events);
+    Vue.mixin(version < 2 ? {init: initEvents} : {beforeCreate: initEvents});
 }
 
 if (typeof window !== 'undefined' && window.Vue) {

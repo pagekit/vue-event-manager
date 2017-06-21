@@ -22,8 +22,9 @@ rollup.rollup({
   }).code, bundle);
 })
 .then(function (bundle) {
+  var code = fs.readFileSync('dist/vue-event-manager.js', 'utf8');
   return write('dist/vue-event-manager.min.js',
-    banner + '\n' + uglify.minify('dist/vue-event-manager.js').code,
+    banner + '\n' + uglify.minify(code).code,
   bundle);
 })
 .then(function (bundle) {

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Event Manager</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.js"></script>
+        <script src="../dist/vue-event-manager.js"></script>
+    </head>
+    <body>
+
+        <div id="app" class="container">
+
+            <h1>Event Manager</h1>
+
+            <pre>{{ eventLog | json }}</pre>
+
+            <button class="btn btn-primary" type="button" @click="triggerTest">Trigger 'test' event</button>
+
+        </div>
+
+        <script>
+
+            new Vue({
+
+                el: '#app',
+
+                data: function() {
+                    return {
+                        eventLog: []
+                    }
+                },
+
+                created: function() {
+                    this.pushLog('created hook executed');
+                },
+
+                events: {
+
+                    test: function() {
+                        this.pushLog('\'test\' event executed');
+                    }
+
+                },
+
+                filters: {
+
+                    json: function (val) {
+                        return JSON.stringify(val, null, 2);
+                    }
+
+                },
+
+                methods: {
+
+                    pushLog: function(msg) {
+                        this.eventLog.push((new Date).getTime() + ': ' + msg);
+                    },
+
+                    triggerTest: function() {
+                        this.$trigger('test');
+                    }
+
+                }
+
+            });
+
+        </script>
+
+    </body>
+</html>
