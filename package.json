@@ -1,6 +1,6 @@
 {
   "name": "vue-event-manager",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/vue-event-manager.common.js",
   "module": "dist/vue-event-manager.es2015.js",
   "unpkg": "dist/vue-event-manager.min.js",
