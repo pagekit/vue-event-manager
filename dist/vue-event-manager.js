@@ -1,5 +1,5 @@
 /*!
- * vue-event-manager v1.0.3
+ * vue-event-manager v1.0.4
  * https://github.com/pagekit/vue-event-manager
  * Released under the MIT License.
  */
