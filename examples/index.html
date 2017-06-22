@@ -17,10 +17,8 @@
 
             <pre>{{ eventLog | json }}</pre>
 
-            <button class="btn btn-primary" type="button" @click="triggerInstanceMethod">Trigger 'instanceTest' event using instance method</button>
-
-            <button class="btn btn-primary" type="button" @click="triggerGlobalMethod">Trigger 'globalTest' event using global method</button>
-
+            <button class="btn btn-primary" type="button" @click="triggerGlobalMethod">Trigger 'test' event using global method</button>
+            <button class="btn btn-primary" type="button" @click="triggerInstanceMethod">Trigger 'test' event using instance method</button>
 
         </div>
 
@@ -42,12 +40,8 @@
 
                 events: {
 
-                    instanceTest: function() {
-                        this.pushLog('\'instanceTest\' event executed');
-                    },
-
-                    globalTest: function() {
-                        this.pushLog('\'globalTest\' event executed');
+                    test: function(fn) {
+                        this.pushLog('\'test\' event executed using ' + fn);
                     }
 
                 },
@@ -66,12 +60,12 @@
                         this.eventLog.push((new Date).getTime() + ': ' + msg);
                     },
 
-                    triggerInstanceMethod: function() {
-                        this.$trigger('instanceTest');
+                    triggerGlobalMethod: function() {
+                        Vue.events.trigger('test', 'Vue.events.trigger');
                     },
 
-                    triggerGlobalMethod: function() {
-                        Vue.events.trigger('globalTest');
+                    triggerInstanceMethod: function() {
+                        this.$trigger('test', 'this.$trigger');
                     }
 
                 }
