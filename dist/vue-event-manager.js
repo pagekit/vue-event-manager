@@ -184,6 +184,7 @@ function plugin(Vue) {
         }
     }
 
+    Vue.events = Events;
     Vue.prototype.$events = Events;
     Vue.prototype.$trigger = Events.trigger.bind(Events);
     Vue.mixin(version < 2 ? {init: initEvents} : {beforeCreate: initEvents});
