@@ -1,5 +1,5 @@
 /*!
- * vue-event-manager v1.0.4
+ * vue-event-manager v1.0.5
  * https://github.com/pagekit/vue-event-manager
  * Released under the MIT License.
  */
@@ -147,53 +147,52 @@ EventManager.prototype.trigger = function trigger (event, params, asynch) {
  * Install plugin.
  */
 
-function plugin(Vue) {
+var Events = new EventManager();
 
-    if (plugin.installed) {
+Events.install = function (Vue) {
+
+    if (this.installed) {
         return;
     }
 
-    var Events = new EventManager();
-    var version = Number(Vue.version.split('.')[0]);
+    Vue.events = this;
+    Vue.prototype.$events = this;
+    Vue.prototype.$trigger = this.trigger.bind(this);
+    Vue.mixin(Number(Vue.version[0]) < 2 ? {init: initEvents} : {beforeCreate: initEvents});
+};
 
-    function initEvents() {
-        var this$1 = this;
+function initEvents() {
+    var this$1 = this;
 
 
-        var ref = this.$options;
-        var events = ref.events;
-        var _events = [];
+    var ref = this.$options;
+    var events = ref.events;
+    var _events = [];
 
-        if (events) {
+    if (events) {
 
-            forEach(events, function (listeners, event) {
-                forEach(isArray(listeners) ? listeners : [listeners], function (listener) {
+        forEach(events, function (listeners, event) {
+            forEach(isArray(listeners) ? listeners : [listeners], function (listener) {
 
-                    var priority = 0;
+                var priority = 0;
 
-                    if (isObject(listener)) {
-                        priority = listener.priority;
-                        listener = listener.handler;
-                    }
+                if (isObject(listener)) {
+                    priority = listener.priority;
+                    listener = listener.handler;
+                }
 
-                    _events.push(Events.on(event, listener.bind(this$1), priority));
-                });
+                _events.push(Events.on(event, listener.bind(this$1), priority));
             });
+        });
 
-            this.$on('hook:beforeDestroy', function () { return _events.forEach(function (off) { return off(); }); });
-        }
+        this.$on('hook:beforeDestroy', function () { return _events.forEach(function (off) { return off(); }); });
     }
-
-    Vue.events = Events;
-    Vue.prototype.$events = Events;
-    Vue.prototype.$trigger = Events.trigger.bind(Events);
-    Vue.mixin(version < 2 ? {init: initEvents} : {beforeCreate: initEvents});
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
-    window.Vue.use(plugin);
+    window.Vue.use(Events);
 }
 
-return plugin;
+return Events;
 
 })));
