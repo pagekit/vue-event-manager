@@ -14,36 +14,39 @@ rollup.rollup({
   entry: 'src/index.js',
   plugins: [buble()]
 })
-.then(function (bundle) {
-  return write('dist/vue-event-manager.js', bundle.generate({
+.then(bundle =>
+  bundle.generate({
     format: 'umd',
     banner: banner,
     moduleName: 'VueEventManager'
-  }).code, bundle);
-})
-.then(function (bundle) {
-  var code = fs.readFileSync('dist/vue-event-manager.js', 'utf8');
-  return write('dist/vue-event-manager.min.js',
-    banner + '\n' + uglify.minify(code).code,
-  bundle);
-})
-.then(function (bundle) {
-  return write('dist/vue-event-manager.es2015.js', bundle.generate({
+  }).then(({code}) => write('dist/vue-event-manager.js', code, bundle))
+)
+.then(bundle =>
+  write('dist/vue-event-manager.min.js', banner + '\n' +
+    uglify.minify(read('dist/vue-event-manager.js')).code,
+  bundle)
+)
+.then(bundle =>
+  bundle.generate({
     format: 'es',
     banner: banner
-  }).code, bundle);
-})
-.then(function (bundle) {
-  return write('dist/vue-event-manager.common.js', bundle.generate({
+  }).then(({code}) => write('dist/vue-event-manager.es2015.js', code, bundle))
+)
+.then(bundle =>
+  bundle.generate({
     format: 'cjs',
     banner: banner
-  }).code, bundle);
-})
+  }).then(({code}) => write('dist/vue-event-manager.common.js', code, bundle))
+)
 .catch(logError);
 
+function read(path) {
+  return fs.readFileSync(path, 'utf8')
+}
+
 function write(dest, code, bundle) {
-  return new Promise(function (resolve, reject) {
-    fs.writeFile(dest, code, function (err) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(dest, code, err => {
       if (err) return reject(err);
       console.log(blue(dest) + ' ' + getSize(code));
       resolve(bundle);
