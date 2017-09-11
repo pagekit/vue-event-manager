@@ -11,14 +11,14 @@ var banner =
     " */\n";
 
 rollup.rollup({
-  entry: 'src/index.js',
+  input: 'src/index.js',
   plugins: [buble()]
 })
 .then(bundle =>
   bundle.generate({
     format: 'umd',
     banner: banner,
-    moduleName: 'VueEventManager'
+    name: 'VueEventManager'
   }).then(({code}) => write('dist/vue-event-manager.js', code, bundle))
 )
 .then(bundle =>
