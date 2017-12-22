@@ -18,6 +18,8 @@ export function forEach(collection, callback) {
  * Array.findIndex() polyfill.
  */
 if (!Array.prototype.findIndex) {
+
+    // eslint-disable-next-line
     Object.defineProperty(Array.prototype, 'findIndex', {
 
         value(predicate) {

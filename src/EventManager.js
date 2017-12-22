@@ -2,7 +2,7 @@
  * Event manager class.
  */
 
-import { isArray } from './util';
+import {isArray} from './util';
 
 export default class EventManager {
 

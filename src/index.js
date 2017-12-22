@@ -3,7 +3,7 @@
  */
 
 import EventManager from './EventManager';
-import { forEach, isArray, isObject } from './util';
+import {forEach, isArray, isObject} from './util';
 
 var Events = new EventManager();
 
