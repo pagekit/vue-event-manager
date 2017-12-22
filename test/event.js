@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-describe('Vue.eventmanager', () => {
+describe('Vue.events', () => {
 
   it('Trigger Method with one param', () => {
     new Vue({
@@ -8,7 +8,7 @@ describe('Vue.eventmanager', () => {
         this.$trigger('someEvent', 'foo');
       },
       events: {
-        someEvent(param) { 
+        someEvent(param) {
           expect(param).toBe('foo');
         }
       }
@@ -21,7 +21,7 @@ describe('Vue.eventmanager', () => {
         this.$trigger('paramArray', ['foo', 'bar']);
       },
       events: {
-        paramArray(param, param2) { 
+        paramArray(param, param2) {
           expect(param).toBe('foo');
           expect(param2).toBe('bar');
         }
@@ -35,7 +35,7 @@ describe('Vue.eventmanager', () => {
         this.$trigger('paramObject', { foo : 'bar' });
       },
       events: {
-        paramObject(param) { 
+        paramObject(param) {
           expect(param.foo).toBe('bar');
         }
       }
@@ -85,17 +85,17 @@ describe('Vue.eventmanager', () => {
         }
       },
       events: {
-        testEvent(param) { 
+        testEvent(param) {
           this.isLoaded = true;
           expect(this.isLoaded).toBe(true);
         }
       }
     });
-    
+
     var vm2 = new Vue({
       events: {
         testEvent:{
-          handler(param) { 
+          handler(param) {
            expect(param).toBe('foo');
           },
           priority: 10
@@ -103,7 +103,7 @@ describe('Vue.eventmanager', () => {
       }
     });
    vm1.$trigger('testEvent', 'foo');
-  });  
+  });
 
   it('Trigger Method with Cancel Event', () => {
 
@@ -114,17 +114,17 @@ describe('Vue.eventmanager', () => {
         }
       },
       events: {
-        actionCancel(param) { 
+        actionCancel(param) {
           this.isLoaded = true;
           return "lastAction";
         }
       }
     });
-    
+
     var vm2 = new Vue({
       events: {
         actionCancel:{
-          handler(param) { 
+          handler(param) {
            expect(param).toBe('foo');
            return false;
           },

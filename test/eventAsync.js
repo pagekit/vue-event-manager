@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-describe('Vue.eventmanager Async', () => {
+describe('Vue.events Async', () => {
   it('Trigger Method asynchronous', () => {
     new Vue({
       data() {
@@ -13,11 +13,11 @@ describe('Vue.eventmanager Async', () => {
         this.$trigger('sendParam', 'foo');
       },
       events: {
-        setRun() { 
+        setRun() {
           this.isRun = true;
           expect(this.isRun).toBe(true);
         },
-        sendParam(param) { 
+        sendParam(param) {
           expect(this.isRun).toBe(false);
         }
       }
@@ -33,18 +33,18 @@ describe('Vue.eventmanager Async', () => {
         }
       },
       events: {
-        testEvent(param) { 
+        testEvent(param) {
           this.isLoaded = true;
           expect(this.isLoaded).toBe(true);
           done();
         }
       }
     });
-    
+
     var vm2 = new Vue({
       events: {
         testEvent:{
-          handler(param) { 
+          handler(param) {
            expect(param).toBe('foo');
            return new Promise((resolve) => {
             setTimeout(resolve, 300);

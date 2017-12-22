@@ -1,3 +1,5 @@
+const webpack = require('../webpack.config');
+
 module.exports = config => {
 
   config.set({
@@ -6,10 +8,9 @@ module.exports = config => {
     browsers: ['Chrome', 'Safari', 'Firefox'],
     files: ['index.js'],
     preprocessors: {
-      'index.js' : ['webpack']
+      'index.js': ['webpack']
     },
-    proxies: {
-
-    }
+    webpack
   });
+
 };
