@@ -26,6 +26,12 @@ function initEvents() {
     if (events) {
 
         forEach(events, (listeners, event) => {
+            if (typeof listeners === 'string') {
+                const name = listeners;
+                listeners = (...args) => {
+                    this[name].apply(this, args);
+                };
+            }
             forEach(isArray(listeners) ? listeners : [listeners], listener => {
 
                 var priority = 0;
