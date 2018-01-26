@@ -138,4 +138,26 @@ describe('Vue.events', () => {
 
   });
 
+  it('Use string names of methods in event list', () => {
+    new Vue({
+      data() {
+        return {
+          isRun : false
+        }
+      },
+      created() {
+        this.$trigger('test');
+        expect(this.isRun).toBe(true);
+      },
+      methods: {
+        test() {
+          this.isRun = true;
+        }
+      },
+      events: {
+        test: 'test'
+      }
+    });
+  });
+
 });
