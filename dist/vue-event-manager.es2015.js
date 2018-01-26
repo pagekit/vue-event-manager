@@ -1,5 +1,5 @@
 /*!
- * vue-event-manager v1.0.5
+ * vue-event-manager v1.0.6
  * https://github.com/pagekit/vue-event-manager
  * Released under the MIT License.
  */
@@ -24,6 +24,8 @@ function forEach(collection, callback) {
  * Array.findIndex() polyfill.
  */
 if (!Array.prototype.findIndex) {
+
+    // eslint-disable-next-line
     Object.defineProperty(Array.prototype, 'findIndex', {
 
         value: function value(predicate) {
@@ -175,12 +177,23 @@ function initEvents() {
                     listener = listener.handler;
                 }
 
-                _events.push(Events.on(event, listener.bind(this$1), priority));
+                _events.push(Events.on(event, bindListener(listener, this$1), priority));
             });
         });
 
         this.$on('hook:beforeDestroy', function () { return _events.forEach(function (off) { return off(); }); });
     }
+}
+
+function bindListener(fn, vm) {
+
+    if (typeof fn === 'string') {
+        return function () {
+            return vm[fn].apply(vm, arguments);
+        }
+    }
+
+    return fn.bind(vm);
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
