@@ -26,7 +26,6 @@ function initEvents() {
     if (events) {
 
         forEach(events, (listeners, event) => {
-
             forEach(isArray(listeners) ? listeners : [listeners], listener => {
 
                 var priority = 0;
@@ -36,17 +35,23 @@ function initEvents() {
                     listener = listener.handler;
                 }
 
-                if (typeof listener === 'string') {
-                    const name = listener;
-                    listener = (...args) => this[name].apply(this, args);
-                }
-
-                _events.push(Events.on(event, listener.bind(this), priority));
+                _events.push(Events.on(event, bindListener(listener, this), priority));
             });
         });
 
         this.$on('hook:beforeDestroy', () => _events.forEach(off => off()));
     }
+}
+
+function bindListener(fn, vm) {
+
+    if (typeof fn === 'string') {
+        return function () {
+            return vm[fn].apply(vm, arguments);
+        }
+    }
+
+    return fn.bind(vm);
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
