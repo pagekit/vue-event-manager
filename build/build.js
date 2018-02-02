@@ -1,11 +1,11 @@
 /* eslint-env node */
 
-var fs = require('fs');
-var rollup = require('rollup');
-var uglify = require('uglify-js');
-var buble = require('rollup-plugin-buble');
-var {version} = require('../package.json');
-var banner =
+const fs = require('fs');
+const rollup = require('rollup');
+const uglify = require('uglify-js');
+const buble = require('rollup-plugin-buble');
+const {version} = require('../package.json');
+const banner =
     '/*!\n' +
     ' * vue-event-manager v' + version + '\n' +
     ' * https://github.com/pagekit/vue-event-manager\n' +

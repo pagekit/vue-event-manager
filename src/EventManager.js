@@ -12,9 +12,8 @@ export default class EventManager {
 
     on(event, callback, priority = 0) {
 
-        var listeners = this.listeners[event] || [], index;
-
-        index = listeners.findIndex(listener => listener.priority < priority);
+        const listeners = this.listeners[event] || [];
+        const index = listeners.findIndex(listener => listener.priority < priority);
 
         if (~index) {
             listeners.splice(index, 0, {callback, priority});
@@ -33,11 +32,11 @@ export default class EventManager {
             delete this.listeners[event];
         }
 
-        var listeners = this.listeners[event], index;
+        const listeners = this.listeners[event];
 
         if (listeners && callback) {
 
-            index = listeners.findIndex(listener => listener.callback === callback);
+            const index = listeners.findIndex(listener => listener.callback === callback);
 
             if (~index) {
                 listeners.splice(index, 1);
@@ -53,7 +52,7 @@ export default class EventManager {
 
         return ((this.listeners[event] || []).concat()).reduce((result, listener) => {
 
-            var callback = result => {
+            const callback = result => {
 
                 if (result === false) {
                     return result;

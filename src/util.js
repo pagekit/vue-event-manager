@@ -32,14 +32,15 @@ if (!Array.prototype.findIndex) {
                 throw new TypeError('predicate must be a function');
             }
 
-            var o = Object(this);
-            var len = o.length >>> 0;
-            var thisArg = arguments[1];
-            var k = 0;
+            const o = Object(this);
+            const len = o.length >>> 0;
+            const thisArg = arguments[1];
+
+            let k = 0;
 
             while (k < len) {
 
-                var kValue = o[k];
+                const kValue = o[k];
 
                 if (predicate.call(thisArg, kValue, k, o)) {
                     return k;

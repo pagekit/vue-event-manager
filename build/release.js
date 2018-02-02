@@ -1,7 +1,7 @@
 /* eslint-env node */
 
-var replace = require('replace-in-file');
-var version = process.argv[2];
+const replace = require('replace-in-file');
+const version = process.argv[2];
 
 replace({
     files: 'package.json',

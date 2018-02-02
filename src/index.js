@@ -5,7 +5,7 @@
 import EventManager from './EventManager';
 import {forEach, isArray, isObject} from './util';
 
-var Events = new EventManager();
+const Events = new EventManager();
 
 Events.install = function (Vue) {
 
@@ -21,14 +21,15 @@ Events.install = function (Vue) {
 
 function initEvents() {
 
-    var {events} = this.$options, _events = [];
+    const _events = [];
+    const {events} = this.$options;
 
     if (events) {
 
         forEach(events, (listeners, event) => {
             forEach(isArray(listeners) ? listeners : [listeners], listener => {
 
-                var priority = 0;
+                let priority = 0;
 
                 if (isObject(listener)) {
                     priority = listener.priority;
@@ -48,7 +49,7 @@ function bindListener(fn, vm) {
     if (typeof fn === 'string') {
         return function () {
             return vm[fn].apply(vm, arguments);
-        }
+        };
     }
 
     return fn.bind(vm);

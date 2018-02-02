@@ -22,8 +22,10 @@
   },
   "scripts": {
     "karma": "karma start test/karma.conf.js --single-run",
-    "build": "node build/build.js",
-    "release": "node build/release.js"
+    "build": "node ./build/build.js",
+    "release": "node ./build/release.js",
+    "eslint": "eslint .",
+    "eslint-fix": "eslint . --fix"
   },
   "devDependencies": {
     "buble": "^0.18.0",
@@ -38,9 +40,9 @@
     "karma-safari-launcher": "^1.0.0",
     "karma-webpack": "^2.0.9",
     "replace-in-file": "^3.1.0",
-    "rollup": "^0.55.1",
+    "rollup": "^0.55.3",
     "rollup-plugin-buble": "^0.18.0",
-    "uglify-js": "^3.2.2",
+    "uglify-js": "^3.3.9",
     "vue": "^2.5.13",
     "webpack": "^3.10.0"
   }
