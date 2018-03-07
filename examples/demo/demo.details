@@ -1,6 +1,7 @@
 ---
 name: Vue Event Manager
 wrap: b
+editor_mode: grid_4
 resources:
   - https://cdn.jsdelivr.net/npm/vue@2.5.13
   - https://cdn.jsdelivr.net/npm/vue-event-manager@1.0.6
