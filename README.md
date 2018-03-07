@@ -10,7 +10,7 @@ The plugin for [Vue.js](http://vuejs.org) provides a declarative way to bind eve
 - Compact size 2KB
 
 ## Installation
-You can install it via [yarn](https://yarnpkg.com/) or [NPM](http://npmjs.org/).
+You can install it via [yarn](https://yarnpkg.com) or [NPM](https://npmjs.org).
 ```
 $ yarn add vue-event-manager
 $ npm install vue-event-manager
