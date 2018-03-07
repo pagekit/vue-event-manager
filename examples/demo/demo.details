@@ -1,5 +1,6 @@
 ---
 name: Vue Event Manager
+wrap: b
 resources:
   - https://cdn.jsdelivr.net/npm/vue@2.5.13
   - https://cdn.jsdelivr.net/npm/vue-event-manager@1.0.6
