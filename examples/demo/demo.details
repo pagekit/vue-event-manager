@@ -5,5 +5,5 @@ editor_mode: grid_4
 resources:
   - https://cdn.jsdelivr.net/npm/vue@2.5.13
   - https://cdn.jsdelivr.net/npm/vue-event-manager@1.0.6
-  - https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css
+  - https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css
 ...
