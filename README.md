@@ -23,7 +23,7 @@ Available on [jsdelivr](https://cdn.jsdelivr.net/npm/vue-event-manager@1.0.6) or
 ```
 
 ## Example
-Try the example on [jsfiddle](https://jsfiddle.net/gh/get/library/pure/pagekit/vue-event-manager/tree/master/examples/demo/).
+Try the example on [jsfiddle](https://jsfiddle.net/gh/get/vue/2.5.13/pagekit/vue-event-manager/tree/master/examples/demo/).
 ```js
 new Vue({
 
