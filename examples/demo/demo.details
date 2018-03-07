@@ -1,0 +1,7 @@
+---
+name: Vue Event Manager
+resources:
+  - https://cdn.jsdelivr.net/npm/vue@2.5.13
+  - https://cdn.jsdelivr.net/npm/vue-event-manager@1.0.5
+  - https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css
+...

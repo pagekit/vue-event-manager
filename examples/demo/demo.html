@@ -1,0 +1,15 @@
+<div id="app" class="container">
+
+    <h1>Event Manager</h1>
+
+    <hr>
+
+    <button class="btn btn-primary" type="button" @click="triggerGlobalMethod">Trigger 'test' event using global method</button>
+    <button class="btn btn-primary" type="button" @click="triggerInstanceMethod">Trigger 'test' event using instance method</button>
+    <button class="btn btn-primary" type="button" @click="$trigger('pushLog', 'log')">Trigger 'pushLog' event using instace method</button>
+
+    <hr>
+
+    <pre>{{ eventLog | json }}</pre>
+
+</div>
