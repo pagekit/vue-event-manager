@@ -1,20 +1,22 @@
+/* global Vue */
+
 new Vue({
 
     el: '#app',
 
-    data: function() {
+    data() {
         return {
             eventLog: []
-        }
+        };
     },
 
-    created: function() {
+    created() {
         this.pushLog('created hook executed');
     },
 
     events: {
 
-        test: function(fn) {
+        test(fn) {
             this.pushLog('\'test\' event executed using ' + fn);
         },
 
@@ -24,7 +26,7 @@ new Vue({
 
     filters: {
 
-        json: function (val) {
+        json (val) {
             return JSON.stringify(val, null, 2);
         }
 
@@ -32,15 +34,15 @@ new Vue({
 
     methods: {
 
-        pushLog: function(msg) {
+        pushLog(msg) {
             this.eventLog.push((new Date).getTime() + ': ' + msg);
         },
 
-        triggerGlobalMethod: function() {
+        triggerGlobalMethod() {
             Vue.events.trigger('test', 'Vue.events.trigger');
         },
 
-        triggerInstanceMethod: function() {
+        triggerInstanceMethod() {
             this.$trigger('test', 'this.$trigger');
         }
 
