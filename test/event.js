@@ -8,8 +8,9 @@ describe('Vue.events', () => {
         this.$trigger('someEvent', 'foo');
       },
       events: {
-        someEvent(param) {
+        someEvent(event, param) {
           expect(param).toBe('foo');
+          expect(event.name).toBe('someEvent');
         }
       }
     });
@@ -21,7 +22,7 @@ describe('Vue.events', () => {
         this.$trigger('paramArray', ['foo', 'bar']);
       },
       events: {
-        paramArray(param, param2) {
+        paramArray(event, param, param2) {
           expect(param).toBe('foo');
           expect(param2).toBe('bar');
         }
@@ -35,7 +36,7 @@ describe('Vue.events', () => {
         this.$trigger('paramObject', { foo : 'bar' });
       },
       events: {
-        paramObject(param) {
+        paramObject(event, param) {
           expect(param.foo).toBe('bar');
         }
       }
@@ -54,7 +55,7 @@ describe('Vue.events', () => {
         prioHandler: [
           {
             // handler callback
-            handler(param) {
+            handler(event, param) {
               this.lastPrio = 10;
             },
             // a higher priority, means earlier execution
@@ -62,7 +63,7 @@ describe('Vue.events', () => {
           },
           {
             // handler callback
-            handler(param) {
+            handler(event, param) {
               expect(this.lastPrio).toBe(10);
               this.lastPrio = -10;
             },
@@ -85,7 +86,7 @@ describe('Vue.events', () => {
         }
       },
       events: {
-        testEvent(param) {
+        testEvent(event, param) {
           this.isLoaded = true;
           expect(this.isLoaded).toBe(true);
         }
@@ -95,7 +96,7 @@ describe('Vue.events', () => {
     var vm2 = new Vue({
       events: {
         testEvent:{
-          handler(param) {
+          handler(event, param) {
            expect(param).toBe('foo');
           },
           priority: 10
@@ -114,7 +115,7 @@ describe('Vue.events', () => {
         }
       },
       events: {
-        actionCancel(param) {
+        actionCancel(event, param) {
           this.isLoaded = true;
           return "lastAction";
         }
@@ -124,7 +125,7 @@ describe('Vue.events', () => {
     var vm2 = new Vue({
       events: {
         actionCancel:{
-          handler(param) {
+          handler(event, param) {
            expect(param).toBe('foo');
            return false;
           },

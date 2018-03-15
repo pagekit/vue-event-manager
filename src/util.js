@@ -8,6 +8,10 @@ export function isObject(obj) {
     return obj !== null && typeof obj === 'object';
 }
 
+export function isUndefined(obj) {
+    return typeof obj === 'undefined';
+}
+
 export function forEach(collection, callback) {
     Object.keys(collection || {}).forEach(key => {
         callback.call(null, collection[key], key);

@@ -37,13 +37,13 @@ new Vue({
   events: {
 
     // event handler (priority 0)
-    someEvent(param) { ... },
+    someEvent(event, param) { ... },
 
     // event handler (priority 10)
     earlyEvent: {
 
         // handler callback
-        handler(param) { ... },
+        handler(event, param) { ... },
 
         // a higher priority, means earlier execution
         priority: 10
@@ -54,7 +54,7 @@ new Vue({
     lateEvent: {
 
         // handler callback
-        handler(param) { ... },
+        handler(event, param) { ... },
 
         // a lower priority, means late execution
         priority: -10

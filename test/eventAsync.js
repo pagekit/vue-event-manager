@@ -17,7 +17,7 @@ describe('Vue.events Async', () => {
           this.isRun = true;
           expect(this.isRun).toBe(true);
         },
-        sendParam(param) {
+        sendParam(event, param) {
           expect(this.isRun).toBe(false);
         }
       }
@@ -33,7 +33,7 @@ describe('Vue.events Async', () => {
         }
       },
       events: {
-        testEvent(param) {
+        testEvent(event, param) {
           this.isLoaded = true;
           expect(this.isLoaded).toBe(true);
           done();
@@ -44,7 +44,7 @@ describe('Vue.events Async', () => {
     var vm2 = new Vue({
       events: {
         testEvent:{
-          handler(param) {
+          handler(event, param) {
            expect(param).toBe('foo');
            return new Promise((resolve) => {
             setTimeout(resolve, 300);

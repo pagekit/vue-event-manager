@@ -32,7 +32,7 @@ rollup.rollup({
   bundle.generate({
       format: 'es',
       banner: banner
-  }).then(({code}) => write('dist/vue-event-manager.es2015.js', code, bundle))
+  }).then(({code}) => write('dist/vue-event-manager.esm.js', code, bundle))
 )
 .then(bundle =>
   bundle.generate({

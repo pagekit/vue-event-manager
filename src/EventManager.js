@@ -2,7 +2,7 @@
  * Event manager class.
  */
 
-import {isArray} from './util';
+import {isArray, isUndefined} from './util';
 
 export default class EventManager {
 
@@ -44,34 +44,60 @@ export default class EventManager {
         }
     }
 
-    trigger(event, params = [], asynch = false) {
+    trigger(event, params, asynch = false) {
+
+        const $event = new Event(event, params);
+        const reject = result => Promise.reject(result);
+        const resolve = result => !isUndefined(result) ? result : $event.result;
+        const reducer = (result, {callback}) => {
+
+            const next = result => {
+
+                if (!isUndefined(result)) {
+                    $event.result = result;
+                }
+
+                if (result === false) {
+                    $event.stopPropagation();
+                }
+
+                if ($event.isPropagationStopped()) {
+                    return $event.result;
+                }
+
+                return callback.apply(callback, [$event].concat($event.params));
+            };
+
+            return asynch ? result.then(next, reject) : next(result);
+        };
+
+        const listeners = (this.listeners[event] || []).concat();
+        const result = listeners.reduce(reducer, asynch ? Promise.resolve() : undefined);
+
+        return asynch ? result.then(resolve, reject) : resolve(result);
+    }
+
+}
+
+export class Event {
+
+    constructor(name, params = []) {
 
         if (!isArray(params)) {
             params = [params];
         }
 
-        return ((this.listeners[event] || []).concat()).reduce((result, listener) => {
+        this.name = name;
+        this.params = params;
+        this.result = undefined;
+    }
 
-            const callback = result => {
+    stopPropagation() {
+        this.stop = true;
+    }
 
-                if (result === false) {
-                    return result;
-                }
-
-                if (isArray(result)) {
-                    params = result;
-                }
-
-                return listener.callback.apply(listener.callback, params);
-            };
-
-            if (asynch) {
-                return result.then(callback);
-            }
-
-            return callback(result);
-
-        }, asynch ? Promise.resolve() : undefined);
+    isPropagationStopped() {
+        return this.stop === true;
     }
 
 }
