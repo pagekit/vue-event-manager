@@ -1,5 +1,5 @@
 /*!
- * vue-event-manager v1.0.6
+ * vue-event-manager v2.0.0
  * https://github.com/pagekit/vue-event-manager
  * Released under the MIT License.
  */
@@ -14,6 +14,10 @@ var isArray = Array.isArray;
 
 function isObject(obj) {
     return obj !== null && typeof obj === 'object';
+}
+
+function isUndefined(obj) {
+    return typeof obj === 'undefined';
 }
 
 function forEach(collection, callback) {
@@ -43,6 +47,7 @@ if (!Array.prototype.findIndex) {
             var o = Object(this);
             var len = o.length >>> 0;
             var thisArg = arguments[1];
+
             var k = 0;
 
             while (k < len) {
@@ -75,9 +80,8 @@ EventManager.prototype.on = function on (event, callback, priority) {
         if ( priority === void 0 ) priority = 0;
 
 
-    var listeners = this.listeners[event] || [], index;
-
-    index = listeners.findIndex(function (listener) { return listener.priority < priority; });
+    var listeners = this.listeners[event] || [];
+    var index = listeners.findIndex(function (listener) { return listener.priority < priority; });
 
     if (~index) {
         listeners.splice(index, 0, {callback: callback, priority: priority});
@@ -96,11 +100,11 @@ EventManager.prototype.off = function off (event, callback) {
         delete this.listeners[event];
     }
 
-    var listeners = this.listeners[event], index;
+    var listeners = this.listeners[event];
 
     if (listeners && callback) {
 
-        index = listeners.findIndex(function (listener) { return listener.callback === callback; });
+        var index = listeners.findIndex(function (listener) { return listener.callback === callback; });
 
         if (~index) {
             listeners.splice(index, 1);
@@ -109,36 +113,61 @@ EventManager.prototype.off = function off (event, callback) {
 };
 
 EventManager.prototype.trigger = function trigger (event, params, asynch) {
-        if ( params === void 0 ) params = [];
         if ( asynch === void 0 ) asynch = false;
+
+
+    var $event = new Event(event, params);
+    var reject = function (result) { return Promise.reject(result); };
+    var resolve = function (result) { return !isUndefined(result) ? result : $event.result; };
+    var reducer = function (result, ref) {
+            var callback = ref.callback;
+
+
+        var next = function (result) {
+
+            if (!isUndefined(result)) {
+                $event.result = result;
+            }
+
+            if (result === false) {
+                $event.stopPropagation();
+            }
+
+            if ($event.isPropagationStopped()) {
+                return $event.result;
+            }
+
+            return callback.apply(callback, [$event].concat($event.params));
+        };
+
+        return asynch ? result.then(next, reject) : next(result);
+    };
+
+    var listeners = (this.listeners[event] || []).concat();
+    var result = listeners.reduce(reducer, asynch ? Promise.resolve() : undefined);
+
+    return asynch ? result.then(resolve, reject) : resolve(result);
+};
+
+var Event = function Event(name, params) {
+    if ( params === void 0 ) params = [];
 
 
     if (!isArray(params)) {
         params = [params];
     }
 
-    return ((this.listeners[event] || []).concat()).reduce(function (result, listener) {
+    this.name = name;
+    this.params = params;
+    this.result = undefined;
+};
 
-        var callback = function (result) {
+Event.prototype.stopPropagation = function stopPropagation () {
+    this.stop = true;
+};
 
-            if (result === false) {
-                return result;
-            }
-
-            if (isArray(result)) {
-                params = result;
-            }
-
-            return listener.callback.apply(listener.callback, params);
-        };
-
-        if (asynch) {
-            return result.then(callback);
-        }
-
-        return callback(result);
-
-    }, asynch ? Promise.resolve() : undefined);
+Event.prototype.isPropagationStopped = function isPropagationStopped () {
+    return this.stop === true;
 };
 
 /**
@@ -163,9 +192,9 @@ function initEvents() {
     var this$1 = this;
 
 
+    var _events = [];
     var ref = this.$options;
     var events = ref.events;
-    var _events = [];
 
     if (events) {
 
@@ -192,7 +221,7 @@ function bindListener(fn, vm) {
     if (typeof fn === 'string') {
         return function () {
             return vm[fn].apply(vm, arguments);
-        }
+        };
     }
 
     return fn.bind(vm);
