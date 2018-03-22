@@ -66,6 +66,32 @@ new Vue({
 });
 ```
 
+### Short example
+Lets see how **easy** you can **watch global events** like reactive properties! (Like in this [example](https://vuejs.org/v2/examples/commits.html)). 
+Let's assume you have a logout button in any component template and want it to be handled *somewhere else* without these nasty `$on(...)` and `$off(...)` lines in the created and destroy hooks.
+
+```html
+<!-- logoutButton.vue -->
+<button @click="$trigger('logout:the-user')">Logout</button>
+```
+
+```js
+// userManager.vue
+export default {
+  name: 'any-other-component',
+  events: {
+    // the event name string binds the method name string
+    'logout:the-user': 'logout'
+  },
+  methods: {
+    // this method will be called everytime the event occurs
+    logout (event, param) { 
+      this.$http.post('/logout')
+    }
+  }
+}
+```
+
 ## Changelog
 
 Details changes for each release are documented in the [release notes](https://github.com/pagekit/vue-event-manager/releases).
