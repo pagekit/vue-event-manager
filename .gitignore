@@ -1,3 +1,4 @@
 /node_modules
 /test/specs.js
+/yarn-error.log
 .DS_Store
