@@ -66,8 +66,7 @@ new Vue({
 });
 ```
 
-### Short example
-Lets see how **easy** you can **watch global events** like reactive properties! (Like in this [example](https://vuejs.org/v2/examples/commits.html)). 
+Lets see how **easy** you can **watch global events** like reactive properties! (Like in this [example](https://vuejs.org/v2/examples/commits.html)).
 Let's assume you have a logout button in any component template and want it to be handled *somewhere else* without these nasty `$on(...)` and `$off(...)` lines in the created and destroy hooks.
 
 ```html
@@ -78,17 +77,21 @@ Let's assume you have a logout button in any component template and want it to b
 ```js
 // userManager.vue
 export default {
+
   name: 'any-other-component',
+
   events: {
     // the event name string binds the method name string
     'logout:the-user': 'logout'
   },
+
   methods: {
     // this method will be called everytime the event occurs
-    logout (event, param) { 
+    logout (event, param) {
       this.$http.post('/logout')
     }
   }
+
 }
 ```
 
