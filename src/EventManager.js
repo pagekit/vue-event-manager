@@ -2,7 +2,7 @@
  * Event manager class.
  */
 
-import {isArray, isUndefined} from './util';
+import {array, isArray, isUndefined} from './util';
 
 export default class EventManager {
 
@@ -12,7 +12,7 @@ export default class EventManager {
 
     on(event, callback, priority = 0) {
 
-        const listeners = this.listeners[event] || [];
+        const listeners = array(this.listeners[event]);
         const index = listeners.findIndex(listener => listener.priority < priority);
 
         if (~index) {

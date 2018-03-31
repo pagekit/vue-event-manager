@@ -18,43 +18,44 @@ export function forEach(collection, callback) {
     });
 }
 
+export function array(array = []) {
+
+    if (!array.findIndex) {
+        array.findIndex = findIndex;
+    }
+
+    return array;
+}
+
 /**
  * Array.findIndex() polyfill.
  */
-if (!Array.prototype.findIndex) {
+function findIndex(predicate) {
 
-    // eslint-disable-next-line
-    Object.defineProperty(Array.prototype, 'findIndex', {
+    if (this == null) {
+        throw new TypeError('"this" is null or not defined');
+    }
 
-        value(predicate) {
+    if (typeof predicate !== 'function') {
+        throw new TypeError('predicate must be a function');
+    }
 
-            if (this == null) {
-                throw new TypeError('"this" is null or not defined');
-            }
+    const o = Object(this);
+    const len = o.length >>> 0;
+    const thisArg = arguments[1];
 
-            if (typeof predicate !== 'function') {
-                throw new TypeError('predicate must be a function');
-            }
+    let k = 0;
 
-            const o = Object(this);
-            const len = o.length >>> 0;
-            const thisArg = arguments[1];
+    while (k < len) {
 
-            let k = 0;
+        const kValue = o[k];
 
-            while (k < len) {
-
-                const kValue = o[k];
-
-                if (predicate.call(thisArg, kValue, k, o)) {
-                    return k;
-                }
-
-                k++;
-            }
-
-            return -1;
+        if (predicate.call(thisArg, kValue, k, o)) {
+            return k;
         }
 
-    });
+        k++;
+    }
+
+    return -1;
 }
