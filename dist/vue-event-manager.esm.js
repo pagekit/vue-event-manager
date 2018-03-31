@@ -1,5 +1,5 @@
 /*!
- * vue-event-manager v2.0.0
+ * vue-event-manager v2.0.1
  * https://github.com/pagekit/vue-event-manager
  * Released under the MIT License.
  */
@@ -24,45 +24,48 @@ function forEach(collection, callback) {
     });
 }
 
+function array(array) {
+    if ( array === void 0 ) array = [];
+
+
+    if (!array.findIndex) {
+        array.findIndex = findIndex;
+    }
+
+    return array;
+}
+
 /**
  * Array.findIndex() polyfill.
  */
-if (!Array.prototype.findIndex) {
+function findIndex(predicate) {
 
-    // eslint-disable-next-line
-    Object.defineProperty(Array.prototype, 'findIndex', {
+    if (this == null) {
+        throw new TypeError('"this" is null or not defined');
+    }
 
-        value: function value(predicate) {
+    if (typeof predicate !== 'function') {
+        throw new TypeError('predicate must be a function');
+    }
 
-            if (this == null) {
-                throw new TypeError('"this" is null or not defined');
-            }
+    var o = Object(this);
+    var len = o.length >>> 0;
+    var thisArg = arguments[1];
 
-            if (typeof predicate !== 'function') {
-                throw new TypeError('predicate must be a function');
-            }
+    var k = 0;
 
-            var o = Object(this);
-            var len = o.length >>> 0;
-            var thisArg = arguments[1];
+    while (k < len) {
 
-            var k = 0;
+        var kValue = o[k];
 
-            while (k < len) {
-
-                var kValue = o[k];
-
-                if (predicate.call(thisArg, kValue, k, o)) {
-                    return k;
-                }
-
-                k++;
-            }
-
-            return -1;
+        if (predicate.call(thisArg, kValue, k, o)) {
+            return k;
         }
 
-    });
+        k++;
+    }
+
+    return -1;
 }
 
 /**
@@ -78,7 +81,7 @@ EventManager.prototype.on = function on (event, callback, priority) {
         if ( priority === void 0 ) priority = 0;
 
 
-    var listeners = this.listeners[event] || [];
+    var listeners = array(this.listeners[event]);
     var index = listeners.findIndex(function (listener) { return listener.priority < priority; });
 
     if (~index) {

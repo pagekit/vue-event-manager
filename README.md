@@ -6,7 +6,7 @@ The plugin for [Vue.js](http://vuejs.org) provides a declarative way to bind eve
 
 - Supports event priorities and [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) based asynchronous events
 - Supports latest Firefox, Chrome, Safari, Opera and IE9+
-- Supports Vue 2.0 & Vue 1.0
+- Supports Vue 2.0
 - Compact size 2KB
 
 ## Installation
@@ -17,9 +17,9 @@ $ npm install vue-event-manager
 ```
 
 ### CDN
-Available on [jsdelivr](https://cdn.jsdelivr.net/npm/vue-event-manager@2.0.0) or [unpkg](https://unpkg.com/vue-event-manager@2.0.0).
+Available on [jsdelivr](https://cdn.jsdelivr.net/npm/vue-event-manager@2.0.1) or [unpkg](https://unpkg.com/vue-event-manager@2.0.1).
 ```html
-<script src="https://cdn.jsdelivr.net/npm/vue-event-manager@2.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-event-manager@2.0.1"></script>
 ```
 
 ## Example
