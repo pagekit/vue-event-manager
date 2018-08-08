@@ -26,9 +26,12 @@
     "release": "node ./build/release.js",
     "webpack": "webpack",
     "eslint": "eslint .",
-    "eslint-fix": "eslint . --fix"
+    "eslint-fix": "eslint . --fix",
+    "storybook": "start-storybook -c .storybook -p 9001"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^3.4.10",
+    "@storybook/vue": "^3.4.10",
     "buble": "^0.19.3",
     "buble-loader": "^0.4.1",
     "eslint": "^4.13.1",
@@ -44,7 +47,9 @@
     "rollup": "^0.57.0",
     "rollup-plugin-buble": "^0.19.2",
     "uglify-js": "^3.3.9",
-    "vue": "^2.5.13",
+    "vue": "^2.5.17",
+    "vue-loader": "^15.3.0",
+    "vue-template-compiler": "^2.5.17",
     "webpack": "^3.10.0"
   }
 }

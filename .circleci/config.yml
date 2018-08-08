@@ -26,11 +26,11 @@ jobs:
             - ~/.yarn
       - run:
           name: Lint JavaScript
-          command: yarn run eslint
+          command: yarn eslint
       - run:
           name: Run Tests
           command: |
             karma start test/karma.conf.js --single-run --browsers Chrome
       - run:
           name: Build Release
-          command: yarn run build
+          command: yarn build

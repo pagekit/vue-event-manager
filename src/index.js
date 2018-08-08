@@ -3,19 +3,28 @@
  */
 
 import EventManager from './EventManager';
-import {forEach, isArray, isObject} from './util';
+import {assign, forEach, isArray, isObject} from './util';
 
 const Events = new EventManager();
 
-Events.install = function (Vue) {
+Events.install = function (Vue, options = {}) {
 
     if (this.installed) {
         return;
     }
 
-    Vue.events = this;
-    Vue.prototype.$events = this;
-    Vue.prototype.$trigger = this.trigger.bind(this);
+    // add global instance/methods
+    Vue.prototype.$events = Vue.events = assign(Events, options);
+    Vue.prototype.$trigger = function (event, params = [], asynch = false) {
+
+        if (!isObject(event)) {
+            event = {name: event, origin: this};
+        }
+
+        return Events.trigger(event, params, asynch);
+    };
+
+    // add global mixin to parse "events" from component options
     Vue.mixin(Number(Vue.version[0]) < 2 ? {init: initEvents} : {beforeCreate: initEvents});
 };
 

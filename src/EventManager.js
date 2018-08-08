@@ -2,11 +2,12 @@
  * Event manager class.
  */
 
-import {array, isArray, isUndefined} from './util';
+import {array, assign, isArray, isObject, isUndefined} from './util';
 
 export default class EventManager {
 
     constructor() {
+        this.log = null;
         this.listeners = {};
     }
 
@@ -44,35 +45,39 @@ export default class EventManager {
         }
     }
 
-    trigger(event, params, asynch = false) {
+    trigger(event, params = [], asynch = false) {
 
-        const $event = new Event(event, params);
+        const _event = new Event(event, params);
         const reject = result => Promise.reject(result);
-        const resolve = result => !isUndefined(result) ? result : $event.result;
+        const resolve = result => !isUndefined(result) ? result : _event.result;
         const reducer = (result, {callback}) => {
 
             const next = result => {
 
                 if (!isUndefined(result)) {
-                    $event.result = result;
+                    _event.result = result;
                 }
 
                 if (result === false) {
-                    $event.stopPropagation();
+                    _event.stopPropagation();
                 }
 
-                if ($event.isPropagationStopped()) {
-                    return $event.result;
+                if (_event.isPropagationStopped()) {
+                    return _event.result;
                 }
 
-                return callback.apply(callback, [$event].concat($event.params));
+                return callback.apply(callback, [_event].concat(_event.params));
             };
 
             return asynch ? result.then(next, reject) : next(result);
         };
 
-        const listeners = (this.listeners[event] || []).concat();
+        const listeners = (this.listeners[_event.name] || []).concat();
         const result = listeners.reduce(reducer, asynch ? Promise.resolve() : undefined);
+
+        if (this.log) {
+            this.log.call(this, _event);
+        }
 
         return asynch ? result.then(resolve, reject) : resolve(result);
     }
@@ -81,15 +86,17 @@ export default class EventManager {
 
 export class Event {
 
-    constructor(name, params = []) {
+    constructor(event, params) {
+
+        if (!isObject(event)) {
+            event = {name: event};
+        }
 
         if (!isArray(params)) {
             params = [params];
         }
 
-        this.name = name;
-        this.params = params;
-        this.result = undefined;
+        assign(this, event, {params, result: undefined});
     }
 
     stopPropagation() {
