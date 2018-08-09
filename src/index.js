@@ -24,9 +24,41 @@ Events.install = function (Vue, options = {}) {
         return Events.trigger(event, params, asynch);
     };
 
-    // add global mixin to parse "events" from component options
+    // add merge strategy for "events"
+    Vue.config.optionMergeStrategies.events = mergeEvents;
+
+    // add mixin to parse "events" from component options
     Vue.mixin(Number(Vue.version[0]) < 2 ? {init: initEvents} : {beforeCreate: initEvents});
 };
+
+function mergeEvents(parentVal, childVal) {
+
+    if (!childVal) {
+        return parentVal;
+    }
+
+    if (!parentVal) {
+        return childVal;
+    }
+
+    const events = assign({}, parentVal);
+
+    for (const event in childVal) {
+
+        let parent = events[event];
+        const child = childVal[event];
+
+        if (parent && !isArray(parent)) {
+            parent = [parent];
+        }
+
+        events[event] = parent
+            ? parent.concat(child)
+            : isArray(child) ? child : [child];
+    }
+
+    return events;
+}
 
 function initEvents() {
 
