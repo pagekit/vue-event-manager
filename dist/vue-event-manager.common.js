@@ -1,5 +1,5 @@
 /*!
- * vue-event-manager v2.1.0
+ * vue-event-manager v2.1.1
  * https://github.com/pagekit/vue-event-manager
  * Released under the MIT License.
  */
@@ -167,12 +167,12 @@ EventManager.prototype.trigger = function trigger (event, params, asynch) {
         return asynch ? result.then(next, reject) : next(result);
     };
 
-    var listeners = (this.listeners[_event.name] || []).concat();
-    var result = listeners.reduce(reducer, asynch ? Promise.resolve() : undefined);
-
     if (this.log) {
         this.log.call(this, _event);
     }
+
+    var listeners = (this.listeners[_event.name] || []).concat();
+    var result = listeners.reduce(reducer, asynch ? Promise.resolve() : undefined);
 
     return asynch ? result.then(resolve, reject) : resolve(result);
 };
