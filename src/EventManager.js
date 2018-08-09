@@ -72,12 +72,12 @@ export default class EventManager {
             return asynch ? result.then(next, reject) : next(result);
         };
 
-        const listeners = (this.listeners[_event.name] || []).concat();
-        const result = listeners.reduce(reducer, asynch ? Promise.resolve() : undefined);
-
         if (this.log) {
             this.log.call(this, _event);
         }
+
+        const listeners = (this.listeners[_event.name] || []).concat();
+        const result = listeners.reduce(reducer, asynch ? Promise.resolve() : undefined);
 
         return asynch ? result.then(resolve, reject) : resolve(result);
     }
