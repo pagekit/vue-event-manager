@@ -28,7 +28,7 @@ Events.install = function (Vue, options = {}) {
     Vue.config.optionMergeStrategies.events = mergeEvents;
 
     // add mixin to parse "events" from component options
-    Vue.mixin(Number(Vue.version[0]) < 2 ? {init: initEvents} : {beforeCreate: initEvents});
+    Vue.mixin({beforeCreate: initEvents});
 };
 
 function mergeEvents(parentVal, childVal) {
