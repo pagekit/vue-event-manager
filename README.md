@@ -17,9 +17,9 @@ $ npm install vue-event-manager
 ```
 
 ### CDN
-Available on [jsdelivr](https://cdn.jsdelivr.net/npm/vue-event-manager@2.0.1) or [unpkg](https://unpkg.com/vue-event-manager@2.0.1).
+Available on [jsdelivr](https://cdn.jsdelivr.net/npm/vue-event-manager@2.1.0) or [unpkg](https://unpkg.com/vue-event-manager@2.1.0).
 ```html
-<script src="https://cdn.jsdelivr.net/npm/vue-event-manager@2.0.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-event-manager@2.1.0"></script>
 ```
 
 ## Example

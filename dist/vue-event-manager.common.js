@@ -1,5 +1,5 @@
 /*!
- * vue-event-manager v2.0.1
+ * vue-event-manager v2.1.0
  * https://github.com/pagekit/vue-event-manager
  * Released under the MIT License.
  */
@@ -10,20 +10,22 @@
  * Utility functions.
  */
 
+var assign = Object.assign || _assign;
+
 var isArray = Array.isArray;
 
-function isObject(obj) {
-    return obj !== null && typeof obj === 'object';
+function isObject(val) {
+    return val !== null && typeof val === 'object';
 }
 
-function isUndefined(obj) {
-    return typeof obj === 'undefined';
+function isUndefined(val) {
+    return typeof val === 'undefined';
 }
 
 function forEach(collection, callback) {
-    Object.keys(collection || {}).forEach(function (key) {
-        callback.call(null, collection[key], key);
-    });
+    Object.keys(collection || {}).forEach(
+        function (key) { return callback.call(null, collection[key], key); }
+    );
 }
 
 function array(array) {
@@ -31,16 +33,33 @@ function array(array) {
 
 
     if (!array.findIndex) {
-        array.findIndex = findIndex;
+        array.findIndex = _findIndex;
     }
 
     return array;
 }
 
 /**
+ * Object.assign() polyfill.
+ */
+function _assign(target) {
+    var sources = [], len = arguments.length - 1;
+    while ( len-- > 0 ) sources[ len ] = arguments[ len + 1 ];
+
+
+    sources.forEach(function (source) {
+        Object.keys(source || {}).forEach(
+            function (key) { return target[key] = source[key]; }
+        );
+    });
+
+    return target;
+}
+
+/**
  * Array.findIndex() polyfill.
  */
-function findIndex(predicate) {
+function _findIndex(predicate) {
 
     if (this == null) {
         throw new TypeError('"this" is null or not defined');
@@ -75,6 +94,7 @@ function findIndex(predicate) {
  */
 
 var EventManager = function EventManager() {
+    this.log = null;
     this.listeners = {};
 };
 
@@ -116,12 +136,13 @@ EventManager.prototype.off = function off (event, callback) {
 };
 
 EventManager.prototype.trigger = function trigger (event, params, asynch) {
+        if ( params === void 0 ) params = [];
         if ( asynch === void 0 ) asynch = false;
 
 
-    var $event = new Event(event, params);
+    var _event = new Event(event, params);
     var reject = function (result) { return Promise.reject(result); };
-    var resolve = function (result) { return !isUndefined(result) ? result : $event.result; };
+    var resolve = function (result) { return !isUndefined(result) ? result : _event.result; };
     var reducer = function (result, ref) {
             var callback = ref.callback;
 
@@ -129,40 +150,44 @@ EventManager.prototype.trigger = function trigger (event, params, asynch) {
         var next = function (result) {
 
             if (!isUndefined(result)) {
-                $event.result = result;
+                _event.result = result;
             }
 
             if (result === false) {
-                $event.stopPropagation();
+                _event.stopPropagation();
             }
 
-            if ($event.isPropagationStopped()) {
-                return $event.result;
+            if (_event.isPropagationStopped()) {
+                return _event.result;
             }
 
-            return callback.apply(callback, [$event].concat($event.params));
+            return callback.apply(callback, [_event].concat(_event.params));
         };
 
         return asynch ? result.then(next, reject) : next(result);
     };
 
-    var listeners = (this.listeners[event] || []).concat();
+    var listeners = (this.listeners[_event.name] || []).concat();
     var result = listeners.reduce(reducer, asynch ? Promise.resolve() : undefined);
+
+    if (this.log) {
+        this.log.call(this, _event);
+    }
 
     return asynch ? result.then(resolve, reject) : resolve(result);
 };
 
-var Event = function Event(name, params) {
-    if ( params === void 0 ) params = [];
+var Event = function Event(event, params) {
 
+    if (!isObject(event)) {
+        event = {name: event};
+    }
 
     if (!isArray(params)) {
         params = [params];
     }
 
-    this.name = name;
-    this.params = params;
-    this.result = undefined;
+    assign(this, event, {params: params, result: undefined});
 };
 
 Event.prototype.stopPropagation = function stopPropagation () {
@@ -179,17 +204,63 @@ Event.prototype.isPropagationStopped = function isPropagationStopped () {
 
 var Events = new EventManager();
 
-Events.install = function (Vue) {
+Events.install = function (Vue, options) {
+    if ( options === void 0 ) options = {};
+
 
     if (this.installed) {
         return;
     }
 
-    Vue.events = this;
-    Vue.prototype.$events = this;
-    Vue.prototype.$trigger = this.trigger.bind(this);
-    Vue.mixin(Number(Vue.version[0]) < 2 ? {init: initEvents} : {beforeCreate: initEvents});
+    // add global instance/methods
+    Vue.prototype.$events = Vue.events = assign(Events, options);
+    Vue.prototype.$trigger = function (event, params, asynch) {
+        if ( params === void 0 ) params = [];
+        if ( asynch === void 0 ) asynch = false;
+
+
+        if (!isObject(event)) {
+            event = {name: event, origin: this};
+        }
+
+        return Events.trigger(event, params, asynch);
+    };
+
+    // add merge strategy for "events"
+    Vue.config.optionMergeStrategies.events = mergeEvents;
+
+    // add mixin to parse "events" from component options
+    Vue.mixin({beforeCreate: initEvents});
 };
+
+function mergeEvents(parentVal, childVal) {
+
+    if (!childVal) {
+        return parentVal;
+    }
+
+    if (!parentVal) {
+        return childVal;
+    }
+
+    var events = assign({}, parentVal);
+
+    for (var event in childVal) {
+
+        var parent = events[event];
+        var child = childVal[event];
+
+        if (parent && !isArray(parent)) {
+            parent = [parent];
+        }
+
+        events[event] = parent
+            ? parent.concat(child)
+            : isArray(child) ? child : [child];
+    }
+
+    return events;
+}
 
 function initEvents() {
     var this$1 = this;
