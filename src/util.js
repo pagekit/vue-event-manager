@@ -2,9 +2,25 @@
  * Utility functions.
  */
 
+let _config = {};
+
 export const assign = Object.assign || _assign;
 
 export const isArray = Array.isArray;
+
+export default function ({config}) {
+    _config = config;
+}
+
+export function log(message, color = '#41B883') {
+    if (typeof console !== 'undefined' && _config.devtools) {
+        console.log(`%c vue-event-manager %c ${message} `, 'color: #fff; background: #35495E; padding: 1px; border-radius: 3px 0 0 3px;', `color: #fff; background: ${color}; padding: 1px; border-radius: 0 3px 3px 0;`);
+    }
+}
+
+export function warn(message, color = '#DB6B00') {
+    log(message, color);
+}
 
 export function isObject(val) {
     return val !== null && typeof val === 'object';
