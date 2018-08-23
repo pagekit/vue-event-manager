@@ -6,7 +6,7 @@
   "unpkg": "dist/vue-event-manager.min.js",
   "jsdelivr": "dist/vue-event-manager.min.js",
   "description": "The event manager for Vue.js",
-  "homepage": "https://github.com/pagekit/vue-event-manager#readme",
+  "homepage": "https://github.com/pagekit/vue-event-manager",
   "license": "MIT",
   "keywords": [
     "vue",
