@@ -1,5 +1,5 @@
 /*!
- * vue-event-manager v2.1.1
+ * vue-event-manager v2.1.2
  * https://github.com/pagekit/vue-event-manager
  * Released under the MIT License.
  */
@@ -8,9 +8,25 @@
  * Utility functions.
  */
 
+var _config = {};
+
 var assign = Object.assign || _assign;
 
 var isArray = Array.isArray;
+
+function Util (ref) {
+    var config = ref.config;
+
+    _config = config;
+}
+
+function log(message, color) {
+    if ( color === void 0 ) color = '#41B883';
+
+    if (typeof console !== 'undefined' && _config.devtools) {
+        console.log(("%c vue-event-manager %c " + message + " "), 'color: #fff; background: #35495E; padding: 1px; border-radius: 3px 0 0 3px;', ("color: #fff; background: " + color + "; padding: 1px; border-radius: 0 3px 3px 0;"));
+    }
+}
 
 function isObject(val) {
     return val !== null && typeof val === 'object';
@@ -197,38 +213,46 @@ Event.prototype.isPropagationStopped = function isPropagationStopped () {
 };
 
 /**
- * Install plugin.
+ * Plugin class.
  */
 
 var Events = new EventManager();
 
-Events.install = function (Vue, options) {
-    if ( options === void 0 ) options = {};
+var Plugin = {
+
+    version: '2.1.2',
+
+    install: function install(Vue, options) {
+        if ( options === void 0 ) options = {};
 
 
-    if (this.installed) {
-        return;
-    }
-
-    // add global instance/methods
-    Vue.prototype.$events = Vue.events = assign(Events, options);
-    Vue.prototype.$trigger = function (event, params, asynch) {
-        if ( params === void 0 ) params = [];
-        if ( asynch === void 0 ) asynch = false;
-
-
-        if (!isObject(event)) {
-            event = {name: event, origin: this};
+        if (this.installed) {
+            return;
         }
 
-        return Events.trigger(event, params, asynch);
-    };
+        Util(Vue); log(this.version);
 
-    // add merge strategy for "events"
-    Vue.config.optionMergeStrategies.events = mergeEvents;
+        // add global instance/methods
+        Vue.prototype.$events = Vue.events = assign(Events, options);
+        Vue.prototype.$trigger = function (event, params, asynch) {
+            if ( params === void 0 ) params = [];
+            if ( asynch === void 0 ) asynch = false;
 
-    // add mixin to parse "events" from component options
-    Vue.mixin({beforeCreate: initEvents});
+
+            if (!isObject(event)) {
+                event = {name: event, origin: this};
+            }
+
+            return Events.trigger(event, params, asynch);
+        };
+
+        // add merge strategy for "events"
+        Vue.config.optionMergeStrategies.events = mergeEvents;
+
+        // add mixin to parse "events" from component options
+        Vue.mixin({beforeCreate: initEvents});
+    }
+
 };
 
 function mergeEvents(parentVal, childVal) {
@@ -280,7 +304,7 @@ function initEvents() {
                     listener = listener.handler;
                 }
 
-                _events.push(Events.on(event, bindListener(listener, this$1), priority));
+                _events.push(this$1.$events.on(event, bindListener(listener, this$1), priority));
             });
         });
 
@@ -299,8 +323,12 @@ function bindListener(fn, vm) {
     return fn.bind(vm);
 }
 
+/**
+ * Install plugin.
+ */
+
 if (typeof window !== 'undefined' && window.Vue) {
-    window.Vue.use(Events);
+    window.Vue.use(Plugin);
 }
 
-export default Events;
+export default Plugin;
