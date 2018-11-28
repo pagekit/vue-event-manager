@@ -2,6 +2,8 @@
 
 module.exports = {
 
+    mode: 'production',
+
     entry: {
         'test/specs': './test/index',
     },
@@ -21,7 +23,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: 'buble-loader'
+                use: 'babel-loader'
             }
         ]
     }
