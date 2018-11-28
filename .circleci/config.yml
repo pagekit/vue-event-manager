@@ -11,9 +11,6 @@ jobs:
   build:
     <<: *defaults
     steps:
-      - run:
-          name: Update Environment
-          command: echo 'export PATH=$CIRCLE_WORKING_DIRECTORY/node_modules/.bin:$PATH' >> $BASH_ENV
       - checkout
       - restore_cache:
           key: yarn-{{ checksum "yarn.lock" }}
@@ -30,7 +27,7 @@ jobs:
       - run:
           name: Run Tests
           command: |
-            karma start test/karma.conf.js --single-run --browsers Chrome
+            yarn karma --browsers Chrome
       - run:
           name: Build Release
           command: yarn build
