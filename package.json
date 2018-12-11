@@ -49,8 +49,8 @@
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-replace": "^2.1.0",
     "uglify-js": "^3.4.9",
-    "vue": "^2.5.19",
+    "vue": "^2.5.20",
     "vue-loader": "^15.4.2",
-    "vue-template-compiler": "^2.5.19"
+    "vue-template-compiler": "^2.5.20"
   }
 }
