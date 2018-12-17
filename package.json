@@ -21,6 +21,7 @@
     "url": "git+https://github.com/pagekit/vue-event-manager.git"
   },
   "scripts": {
+    "up": "yarn upgrade-interactive --latest",
     "karma": "karma start test/karma.conf.js --single-run",
     "build": "node ./build/build.js",
     "release": "node ./build/release.js",
@@ -29,10 +30,10 @@
     "storybook": "start-storybook -c .storybook -p 9001"
   },
   "devDependencies": {
-    "@babel/core": "^7.2.0",
+    "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.0",
-    "@storybook/addon-actions": "^4.0.12",
-    "@storybook/vue": "^4.0.12",
+    "@storybook/addon-actions": "^4.1.2",
+    "@storybook/vue": "^4.1.2",
     "babel-loader": "^8.0.4",
     "babel-preset-vue": "^2.0.2",
     "eslint": "^5.10.0",
@@ -45,12 +46,12 @@
     "karma-safari-launcher": "^1.0.0",
     "karma-webpack": "^3.0.5",
     "replace-in-file": "^3.4.2",
-    "rollup": "^0.67.4",
-    "rollup-plugin-babel": "^4.0.3",
+    "rollup": "^0.68.0",
+    "rollup-plugin-babel": "^4.1.0",
     "rollup-plugin-replace": "^2.1.0",
     "uglify-js": "^3.4.9",
-    "vue": "^2.5.20",
+    "vue": "^2.5.21",
     "vue-loader": "^15.4.2",
-    "vue-template-compiler": "^2.5.20"
+    "vue-template-compiler": "^2.5.21"
   }
 }
