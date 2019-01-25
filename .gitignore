@@ -1,4 +1,6 @@
 /node_modules
 /test/specs.js
 /yarn-error.log
+.pnp*
+.history
 .DS_Store
