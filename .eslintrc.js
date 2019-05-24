@@ -9,7 +9,8 @@ module.exports = {
         "eslint:recommended"
     ],
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaVersion": "2018",
     },
     "rules": {
         "brace-style": ["error", "1tbs", {"allowSingleLine": true}],
