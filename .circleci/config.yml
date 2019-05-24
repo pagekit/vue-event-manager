@@ -2,9 +2,7 @@ version: 2
 
 defaults: &defaults
   docker:
-    - image: circleci/node:10-browsers
-  environment:
-    CHROME_BIN: /usr/bin/google-chrome
+    - image: circleci/node:10
   working_directory: ~/vue-event-manager
 
 jobs:
@@ -17,17 +15,17 @@ jobs:
       - run:
           name: Install Dependencies
           command: yarn --pure-lockfile
-      - save_cache:
-          key: yarn-{{ checksum "yarn.lock" }}
-          paths:
-            - ./node_modules
       - run:
           name: Run ESLint
           command: yarn eslint
       - run:
           name: Run Tests
           command: |
-            yarn karma --browsers Chrome
+            yarn jest
       - run:
           name: Build Release
           command: yarn build
+      - save_cache:
+          key: yarn-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules

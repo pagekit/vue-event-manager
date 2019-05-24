@@ -6,8 +6,8 @@
 
         <hr>
 
-        <button class="btn btn-primary" type="button" @click="$trigger('test', 'this.$trigger')">Trigger 'test' event using instance method</button>
-        <button class="btn btn-primary" type="button" @click="trigger('test', 'Vue.events.trigger')">Trigger 'test' event using global method</button>
+        <button class="btn btn-primary" type="button" @click="emit('test', 'Vue.events.emit')">Vue.events.emit('test')</button>
+        <button class="btn btn-primary" type="button" @click="$events.emit('test', 'this.$events.emit')">this.$events.emit('test')</button>
 
     </div>
 
@@ -21,8 +21,8 @@
 
         methods: {
 
-            trigger(event, params) {
-                Vue.events.trigger(event, params);
+            emit(event, ...params) {
+                Vue.events.emit(event, ...params);
             }
 
         },

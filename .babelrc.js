@@ -5,6 +5,12 @@ module.exports = {
             loose: true,
             modules: false
         }]
-    ]
+    ],
+
+    env: {
+        test: {
+            presets: [['@babel/preset-env']]
+        }
+    }
 
 };

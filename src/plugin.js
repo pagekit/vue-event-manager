@@ -1,34 +1,26 @@
 /**
- * Plugin class.
+ * Plugin object.
  */
 
-import EventManager from './EventManager';
-import Util, {log, assign, forEach, isArray, isObject} from './util';
-
-const Events = new EventManager();
+import Logger from './Logger';
+import {assign, forEach, isArray, isObject, inBrowser} from './util';
 
 export default {
 
-    version: '__VERSION__',
+    logger: Logger,
 
-    install(Vue, options = {}) {
+    install(Vue, options = {debug: Vue.config.devtools}) {
 
         if (this.installed) {
             return;
         }
 
-        Util(Vue); log(this.version);
+        if (inBrowser && options.debug) {
+            this.logger.log(this.version, {prefix: 'vue-event-manager'});
+        }
 
         // add global instance/methods
-        Vue.prototype.$events = Vue.events = assign(Events, options);
-        Vue.prototype.$trigger = function (event, params = [], asynch = false) {
-
-            if (!isObject(event)) {
-                event = {name: event, origin: this};
-            }
-
-            return Events.trigger(event, params, asynch);
-        };
+        Vue.prototype.$events = Vue.events = assign(this, options);
 
         // add merge strategy for "events"
         Vue.config.optionMergeStrategies.events = mergeEvents;

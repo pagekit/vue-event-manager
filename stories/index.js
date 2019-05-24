@@ -8,7 +8,7 @@ import {action} from '@storybook/addon-actions';
 Vue.use(VueEventManager, {
 
     // log event action
-    log({name, params}) {
+    log({name}, params) {
         action(name)(...params);
     }
 

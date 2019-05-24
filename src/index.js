@@ -3,9 +3,13 @@
  */
 
 import Plugin from './plugin';
+import EventManager from './EventManager';
+import {assign, inBrowser} from './util';
 
-if (typeof window !== 'undefined' && window.Vue) {
-    window.Vue.use(Plugin);
+assign(EventManager, Plugin);
+
+if (inBrowser && window.Vue) {
+    window.Vue.use(EventManager);
 }
 
-export default Plugin;
+export default EventManager;
