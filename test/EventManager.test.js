@@ -1,97 +1,98 @@
-/**
- * @jest-environment node
- */
+/* eslint-env jest */
 
 import Vue from 'vue';
 import VueEventManager from '../src';
 
 Vue.use(VueEventManager);
 
+/**
+ * @jest-environment node
+ */
 describe('Vue.events', () => {
 
-  it('Basic event', () => {
+    it('Basic event', () => {
 
-    const event = 'basic';
+        const event = 'basic';
 
-    Vue.events.on(event, (foo, bar) => {
+        Vue.events.on(event, (foo, bar) => {
 
-      expect(foo).toBe('foo');
-      expect(bar).toBe('bar');
+            expect(foo).toBe('foo');
+            expect(bar).toBe('bar');
 
-      return true;
+            return true;
+        });
+
+        expect(Vue.events.emit(event, 'foo', 'bar')).toBe(true);
+
     });
 
-    expect(Vue.events.emit(event, 'foo', 'bar')).toBe(true);
+    it('Basic event with priority', () => {
 
-  });
+        const event = 'basicPrio';
 
-  it('Basic event with priority', () => {
+        Vue.events.on(event, () => true, 10);
+        Vue.events.on(event, () => null, -10);
 
-    const event = 'basicPrio';
+        expect(Vue.events.emit(event)).toBe(null);
 
-    Vue.events.on(event, () => true, 10);
-    Vue.events.on(event, () => null, -10);
-
-    expect(Vue.events.emit(event)).toBe(null);
-
-  });
-
-  it('Basic event with stop propergation', () => {
-
-    const event = 'basicStop';
-
-    Vue.events.on(event, () => true, 10);
-    Vue.events.on(event, () => false, 0);
-    Vue.events.on(event, () => null, -10);
-
-    expect(Vue.events.emit(event)).toBe(true);
-
-  });
-
-  it('Filter event', () => {
-
-    const event = 'testFilter';
-
-    Vue.events.on(event, result => {
-
-      expect(result).toBe('foo');
-
-      return 'bar';
     });
 
-    Vue.events.on(event, result => {
+    it('Basic event with stop propergation', () => {
 
-      expect(result).toBe('bar');
+        const event = 'basicStop';
 
-      return 'baz';
+        Vue.events.on(event, () => true, 10);
+        Vue.events.on(event, () => false, 0);
+        Vue.events.on(event, () => null, -10);
+
+        expect(Vue.events.emit(event)).toBe(true);
+
     });
 
-    expect(Vue.events.emit('filter:testFilter', 'foo')).toBe('baz');
+    it('Filter event', () => {
 
-  });
+        const event = 'testFilter';
 
-  it('Async event', () => {
+        Vue.events.on(event, result => {
 
-    return Vue.events.emit('async:testAsync').then(
+            expect(result).toBe('foo');
+
+            return 'bar';
+        });
+
+        Vue.events.on(event, result => {
+
+            expect(result).toBe('bar');
+
+            return 'baz';
+        });
+
+        expect(Vue.events.emit('filter:testFilter', 'foo')).toBe('baz');
+
+    });
+
+    it('Async event', () => {
+
+        return Vue.events.emit('async:testAsync').then(
       result => expect(result).toBe(undefined)
     );
 
-  });
+    });
 
-  it('Async event with listener', () => {
+    it('Async event with listener', () => {
 
-    Vue.events.on('testAsync', () => true);
+        Vue.events.on('testAsync', () => true);
 
-    return Vue.events.emit('async:testAsync').then(
+        return Vue.events.emit('async:testAsync').then(
       result => expect(result).toBe(true)
     );
 
-  });
+    });
 
-  it('Unkown event', () => {
+    it('Unkown event', () => {
 
-    expect(Vue.events.emit('unknown')).toBe(undefined);
+        expect(Vue.events.emit('unknown')).toBe(undefined);
 
-  });
+    });
 
 });
