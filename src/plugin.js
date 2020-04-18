@@ -35,7 +35,9 @@ export default {
 
         // add mixin to parse "events" from component options
         Vue.mixin({beforeCreate: initEvents});
-    }
+    },
+
+    EventManager
 
 };
 
